@@ -1,0 +1,5 @@
+# Ignore generated compilation files
+*.py[cod]
+
+# Ignore generated packaging files
+*.egg-info/
