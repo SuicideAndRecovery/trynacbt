@@ -4,8 +4,8 @@ from dateutil import parser
 import scrapy
 from scrapy.crawler import CrawlerProcess
 
-from trynacbtcrawler.service.CrawledUriService import CrawledUriService
-from trynacbtcrawler.service.ThreadService import ThreadService
+from trynacbt.service.CrawledUriService import CrawledUriService
+from trynacbt.service.ThreadService import ThreadService
 
 
 class Crawler(object):
@@ -25,7 +25,7 @@ class Crawler(object):
 
 class _SitemapSpider(scrapy.spiders.SitemapSpider):
     '''A spider to crawl the sitemap.'''
-    name = 'TrynacbtCrawler'
+    name = 'trynacbt'
     allowed_domains = ['sanctionedsuicide.com']
     download_delay = 4
 

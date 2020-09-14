@@ -7,7 +7,7 @@ License:
 from setuptools import setup, find_packages
 
 setup(
-    name='trynacbtcrawler',
+    name='trynacbt',
     version='0.0.1',
     description='TODO',  # TODO: Finish
     long_description='TODO',  # TODO: Finish
@@ -29,6 +29,6 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        trynacbtcrawl=trynacbtcrawler.view.console:main
+        trynacbt=trynacbt.view.console:main
     '''
 )

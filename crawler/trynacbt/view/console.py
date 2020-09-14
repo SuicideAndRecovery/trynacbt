@@ -10,7 +10,7 @@ License:
 import click
 import scrapy
 
-from trynacbtcrawler.controller.CrawlController import CrawlController
+from trynacbt.controller.CrawlController import CrawlController
 
 
 @click.group()

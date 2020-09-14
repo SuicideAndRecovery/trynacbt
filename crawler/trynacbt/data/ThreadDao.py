@@ -2,7 +2,7 @@ import sqlite3
 
 from dateutil import parser
 
-import trynacbtcrawler.data.files as files
+import trynacbt.data.files as files
 
 
 class ThreadDao:

@@ -1,6 +1,6 @@
 import datetime
 
-from trynacbtcrawler.data.CrawledUriDao import CrawledUriDao
+from trynacbt.data.CrawledUriDao import CrawledUriDao
 
 
 class CrawledUriService(object):
