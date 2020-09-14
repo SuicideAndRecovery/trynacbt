@@ -39,6 +39,12 @@ class ThreadDao:
             if not 'duplicate column name' in str(exception):
                 raise
 
+        try:
+            cursor.execute('ALTER TABLE Posts ADD COLUMN username TEXT')
+        except sqlite3.OperationalError as exception:
+            if not 'duplicate column name' in str(exception):
+                raise
+
         connection.commit()
         connection.close()
 
@@ -57,13 +63,16 @@ class ThreadDao:
 
         cursor.execute('''
             INSERT INTO Posts
-                (threadId, postIndex, message, reactionCount, datetimePosted)
-                VALUES (?, 0, ?, ?, ?)
+                (threadId, postIndex, message, reactionCount, datetimePosted,
+                    username)
+                VALUES (?, 0, ?, ?, ?, ?)
                 ON CONFLICT (threadId, postIndex)
                 DO UPDATE SET message = excluded.message,
                     reactionCount = excluded.reactionCount,
-                    datetimePosted = excluded.datetimePosted;
-        ''', (cursor.lastrowid, message, reactionCount, datetimePosted.isoformat()))
+                    datetimePosted = excluded.datetimePosted,
+                    username = excluded.username;
+        ''', (cursor.lastrowid, message, reactionCount, \
+                datetimePosted.isoformat(), username))
 
         connection.commit()
         connection.close()
