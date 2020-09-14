@@ -1,4 +1,4 @@
-from trynacbtcrawler.model.Crawler import Crawler
+from trynacbt.model.Crawler import Crawler
 
 
 class CrawlController(object):

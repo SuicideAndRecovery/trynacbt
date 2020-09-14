@@ -1,4 +1,4 @@
-from trynacbtcrawler.data.ThreadDao import ThreadDao
+from trynacbt.data.ThreadDao import ThreadDao
 
 class ThreadService(object):
     def __init__(self):
