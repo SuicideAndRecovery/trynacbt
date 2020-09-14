@@ -55,6 +55,7 @@ class _SitemapSpider(scrapy.spiders.SitemapSpider):
             if datetimeModified is None \
                     or crawledUriService.modified(uri, datetimeModified):
                 yield entry
+                break
 
     def parse(self, response):
         crawledUriService = CrawledUriService()
@@ -63,6 +64,7 @@ class _SitemapSpider(scrapy.spiders.SitemapSpider):
         username = ''
         message = ''
         reactionCount = 0
+        datetimePosted = None
 
         for titleResponse in response.css('h1.p-title-value ::text'):
             title = titleResponse.get()
@@ -84,20 +86,26 @@ class _SitemapSpider(scrapy.spiders.SitemapSpider):
                 reactionCount = 3 + int(match.group(1))
             break
 
-        if title == '' or username == '' or message == '':
+        for messageResponse in response.css('time.u-dt ::attr(datetime)'):
+            datetimePosted = parser.parse(messageResponse.get())
+            break
+
+        if title == '' or username == '' or message == '' or datetimePosted is None:
             return
 
         print(title)
         print(username)
         print(message)
         print(reactionCount)
+        print(datetimePosted)
 
         ThreadService().save(
             uri=response.url,
             username=username,
             title=title,
             message=message,
-            reactionCount=reactionCount
+            reactionCount=reactionCount,
+            datetimePosted=datetimePosted
         )
         crawledUriService.save_crawled_now(response.url)
 
