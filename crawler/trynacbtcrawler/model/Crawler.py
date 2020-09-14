@@ -55,7 +55,6 @@ class _SitemapSpider(scrapy.spiders.SitemapSpider):
             if datetimeModified is None \
                     or crawledUriService.modified(uri, datetimeModified):
                 yield entry
-                break
 
     def parse(self, response):
         crawledUriService = CrawledUriService()
