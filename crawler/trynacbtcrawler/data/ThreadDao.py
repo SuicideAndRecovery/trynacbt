@@ -33,10 +33,16 @@ class ThreadDao:
             );
         ''')
 
+        try:
+            cursor.execute('ALTER TABLE Posts ADD COLUMN datetimePosted TEXT')
+        except sqlite3.OperationalError as exception:
+            if not 'duplicate column name' in str(exception):
+                raise
+
         connection.commit()
         connection.close()
 
-    def save(self, uri, username, title, message, reactionCount):
+    def save(self, uri, username, title, message, reactionCount, datetimePosted):
         '''Save a thread to the database.'''
         connection = sqlite3.connect(files.SQLITE_MAIN_PATH)
         cursor = connection.cursor()
@@ -51,12 +57,13 @@ class ThreadDao:
 
         cursor.execute('''
             INSERT INTO Posts
-                (threadId, postIndex, message, reactionCount)
-                VALUES (?, 0, ?, ?)
+                (threadId, postIndex, message, reactionCount, datetimePosted)
+                VALUES (?, 0, ?, ?, ?)
                 ON CONFLICT (threadId, postIndex)
-                DO UPDATE SET postIndex = excluded.postIndex,
-                    message = excluded.message;
-        ''', (cursor.lastrowid, message, reactionCount))
+                DO UPDATE SET message = excluded.message,
+                    reactionCount = excluded.reactionCount,
+                    datetimePosted = excluded.datetimePosted;
+        ''', (cursor.lastrowid, message, reactionCount, datetimePosted.isoformat()))
 
         connection.commit()
         connection.close()

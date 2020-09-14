@@ -9,12 +9,13 @@ class ThreadService(object):
         '''Create the tables for storing crawled threads if needed.'''
         self._threadDao.ensure_tables_exist()
 
-    def save(self, uri, username, title, message, reactionCount):
+    def save(self, uri, username, title, message, reactionCount, datetimePosted):
         '''Save a crawled thread.'''
         self._threadDao.save(
             uri=uri,
             username=username,
             title=title,
             message=message,
-            reactionCount=reactionCount
+            reactionCount=reactionCount,
+            datetimePosted=datetimePosted
         )
