@@ -1,7 +1,7 @@
 from trynacbt.model.Crawler import Crawler
 
 
-class CrawlController(object):
+class CrawlController:
     '''Arranges the crawling of a website.'''
 
     def crawl_sitemap(self, url):

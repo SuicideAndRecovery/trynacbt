@@ -3,7 +3,7 @@ import datetime
 from trynacbt.data.CrawledUriDao import CrawledUriDao
 
 
-class CrawledUriService(object):
+class CrawledUriService:
     '''Service to query and record data about crawled URIs.'''
 
     def __init__(self):

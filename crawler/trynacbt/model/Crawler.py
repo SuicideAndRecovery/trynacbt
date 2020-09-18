@@ -5,15 +5,15 @@ import scrapy
 from scrapy.crawler import CrawlerProcess
 
 from trynacbt.service.CrawledUriService import CrawledUriService
-from trynacbt.service.ThreadService import ThreadService
+import trynacbt.thread as thread
 
 
-class Crawler(object):
+class Crawler:
     '''A simple crawler for SanctionedSuicide threads.'''
     def crawl_sitemap(self, url):
         '''Crawl a sitemap at URL url.'''
         CrawledUriService().initialize_data()
-        ThreadService().initialize_data()
+        thread.initialize_data()
 
         process = CrawlerProcess({
             'HTTPERROR_ALLOWED_CODES': [404]
@@ -98,7 +98,7 @@ class _SitemapSpider(scrapy.spiders.SitemapSpider):
         print(reactionCount)
         print(datetimePosted)
 
-        ThreadService().save(
+        thread.save(
             uri=response.url,
             username=username,
             title=title,
