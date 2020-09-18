@@ -58,7 +58,7 @@ def modified(uri, datetimeModified):
     return lastCrawled < datetimeModified
 
 
-def save(self, uri, datetimeCrawled):
+def save(uri, datetimeCrawled):
     '''Save the datetime crawled for the specified URI.'''
     connection = sqlite3.connect(files.SQLITE_MAIN_PATH)
     cursor = connection.cursor()
