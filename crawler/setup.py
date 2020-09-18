@@ -29,6 +29,6 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        trynacbt=trynacbt.view.console:main
+        trynacbt=trynacbt.console:main
     '''
 )
