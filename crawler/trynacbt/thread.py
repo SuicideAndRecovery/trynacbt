@@ -60,7 +60,7 @@ def _ensure_tables_exist():
     connection.close()
 
 
-def save(self, uri, username, title, message, reactionCount, datetimePosted):
+def save(uri, username, title, message, reactionCount, datetimePosted):
     '''Save a crawled thread to the database.'''
     connection = sqlite3.connect(files.SQLITE_MAIN_PATH)
     cursor = connection.cursor()
