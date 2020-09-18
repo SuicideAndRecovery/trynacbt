@@ -8,19 +8,17 @@ from trynacbt.service.CrawledUriService import CrawledUriService
 import trynacbt.thread as thread
 
 
-class Crawler:
-    '''A simple crawler for SanctionedSuicide threads.'''
-    def crawl_sitemap(self, url):
-        '''Crawl a sitemap at URL url.'''
-        CrawledUriService().initialize_data()
-        thread.initialize_data()
+def crawl_sitemap(url):
+    '''Crawl a sitemap at URL url.'''
+    CrawledUriService().initialize_data()
+    thread.initialize_data()
 
-        process = CrawlerProcess({
-            'HTTPERROR_ALLOWED_CODES': [404]
-        })
-        _SitemapSpider.sitemap_urls = [url]
-        process.crawl(_SitemapSpider)
-        process.start()
+    process = CrawlerProcess({
+        'HTTPERROR_ALLOWED_CODES': [404]
+    })
+    _SitemapSpider.sitemap_urls = [url]
+    process.crawl(_SitemapSpider)
+    process.start()
 
 
 class _SitemapSpider(scrapy.spiders.SitemapSpider):
