@@ -67,6 +67,11 @@ class _SitemapSpider(scrapy.spiders.SitemapSpider):
             username = usernameResponse.get()
             break
 
+        if not username:
+            for usernameResponse in response.css('.message-name span ::text'):
+                username = usernameResponse.get()
+                break
+
         for messageResponse in response.css('article.message-body .bbWrapper'):
             message = messageResponse.get()
             break
@@ -83,14 +88,14 @@ class _SitemapSpider(scrapy.spiders.SitemapSpider):
             datetimePosted = parser.parse(messageResponse.get())
             break
 
-        if title == '' or username == '' or message == '' or datetimePosted is None:
-            return
-
         print(title)
         print(username)
         print(message)
         print(reactionCount)
         print(datetimePosted)
+
+        if title == '' or username == '' or message == '' or datetimePosted is None:
+            return
 
         thread.save(
             uri=response.url,
