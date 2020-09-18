@@ -4,13 +4,13 @@ from dateutil import parser
 import scrapy
 from scrapy.crawler import CrawlerProcess
 
-from trynacbt.service.CrawledUriService import CrawledUriService
+import trynacbt.crawleduri as crawleduri
 import trynacbt.thread as thread
 
 
 def crawl_sitemap(url):
     '''Crawl a sitemap at URL url.'''
-    CrawledUriService().initialize_data()
+    crawleduri.initialize_data()
     thread.initialize_data()
 
     process = CrawlerProcess({
@@ -28,8 +28,6 @@ class _SitemapSpider(scrapy.spiders.SitemapSpider):
     download_delay = 4
 
     def sitemap_filter(self, entries):
-        crawledUriService = CrawledUriService()
-
         for entry in entries:
             # entry example:
             # {
@@ -51,12 +49,10 @@ class _SitemapSpider(scrapy.spiders.SitemapSpider):
                 else None
 
             if datetimeModified is None \
-                    or crawledUriService.modified(uri, datetimeModified):
+                    or crawleduri.modified(uri, datetimeModified):
                 yield entry
 
     def parse(self, response):
-        crawledUriService = CrawledUriService()
-
         title = ''
         username = ''
         message = ''
@@ -104,6 +100,6 @@ class _SitemapSpider(scrapy.spiders.SitemapSpider):
             reactionCount=reactionCount,
             datetimePosted=datetimePosted
         )
-        crawledUriService.save_crawled_now(response.url)
+        crawleduri.save_crawled_now(response.url)
 
         yield
