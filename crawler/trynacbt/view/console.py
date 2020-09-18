@@ -11,7 +11,7 @@ import click
 import scrapy
 
 from trynacbt.controller.CrawlController import CrawlController
-from trynacbt.service.TrainingService import TrainingService
+import trynacbt.training as training
 
 
 @click.group()
@@ -34,14 +34,13 @@ def trainset():
     '''
     Enter an interactive mode to modify the set of training data from the crawler.
     '''
-    trainingService = TrainingService()
-    trainingService.initialize_data()
+    training.initialize_data()
 
     inputResponse = True
     thread = True
 
     while thread and inputResponse:
-        thread = trainingService.get_next_thread()
+        thread = training.get_next_thread()
         if not thread:
             print('No threads left to classify.')
             continue
@@ -53,7 +52,7 @@ def trainset():
 
         inputResponse = input('(1) yes or (2) no or nothing: ')
         if inputResponse in ('1', '2'):
-            trainingService.save(thread, inputResponse == '1')
+            training.save(thread, inputResponse == '1')
 
 
 if __name__ == '__main__':
