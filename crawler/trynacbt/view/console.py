@@ -10,7 +10,7 @@ License:
 import click
 import scrapy
 
-from trynacbt.model.Crawler import Crawler
+import trynacbt.crawler as crawler
 import trynacbt.training as training
 
 
@@ -27,7 +27,7 @@ def sitemap(url):
     '''
     Crawls a sitemap.
     '''
-    Crawler().crawl_sitemap(url)
+    crawler.crawl_sitemap(url)
 
 @main.command()
 def trainset():
