@@ -1,7 +1,7 @@
 from dateutil import parser
 import sqlite3
 
-import trynacbt.data.files as files
+import trynacbt.files as files
 
 
 class Thread:
