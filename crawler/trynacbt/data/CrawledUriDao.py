@@ -2,7 +2,7 @@ import sqlite3
 
 from dateutil import parser
 
-import trynacbt.data.files as files
+import trynacbt.files as files
 
 
 class CrawledUriDao:

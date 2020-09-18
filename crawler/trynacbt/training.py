@@ -1,6 +1,6 @@
 import sqlite3
 
-import trynacbt.data.files as files
+import trynacbt.files as files
 import trynacbt.thread as thread
 
 
