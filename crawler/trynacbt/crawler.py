@@ -59,8 +59,17 @@ class _SitemapSpider(scrapy.spiders.SitemapSpider):
         reactionCount = 0
         datetimePosted = None
 
-        for titleResponse in response.css('h1.p-title-value ::text'):
+        for titleResponse in response.css('h1.p-title-value'):
             title = titleResponse.get()
+            # Strips out the excess spans and surrounding h1 tags.
+            # Examples:
+            # <h1 class="p-title-value"><span class="label label--accent" dir="auto">Venting</span><span class="label-append"> </span>I'm afraid of myself
+            # </h1>
+            # <h1 class="p-title-value">Idea?</h1>
+            pattern = re.compile(r'<h1[^>]*?>(<span[^>]*>[^<]*</[^>]*>[^<]*<span[^>]*>[^<]*</[^>]*>)?([\s\S]*?)</h1>')
+            match = pattern.match(title)
+            if match:
+                title = match.group(2)
             break
 
         for usernameResponse in response.css('.message-name span span ::text'):
