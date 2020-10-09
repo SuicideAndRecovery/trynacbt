@@ -1,4 +1,5 @@
 import sqlite3
+import tensorflow
 
 import trynacbt.files as files
 import trynacbt.thread as thread
@@ -76,3 +77,23 @@ def save(thread, isGoodbyeThread):
 
     connection.commit()
     connection.close()
+
+
+def training_dataset():
+    '''Return a DataSet containing the training data.'''
+    return tensorflow.data.experimental.SqlDataset(
+        driver_name = 'sqlite',
+        data_source_name = files.SQLITE_MAIN_PATH,
+        query = '''
+            SELECT T.title || ' ' || P.message,
+                    TGT.isGoodbyeThread
+                FROM Threads T
+                JOIN Posts P
+                    ON T.id = P.threadId
+                        AND P.postIndex = 0
+                JOIN TrainingGoodbyeThreads TGT
+                    ON TGT.threadId = T.id
+                ORDER BY RANDOM();
+        ''',
+        output_types = (tensorflow.string, tensorflow.bool)
+    )

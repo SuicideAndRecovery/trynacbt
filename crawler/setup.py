@@ -25,7 +25,9 @@ setup(
         'appdirs',
         'click',
         'python-dateutil',
-        'scrapy==2.3'
+        'scrapy==2.3',
+        'tensorflow',
+        'tensorflow_hub'
     ],
     entry_points='''
         [console_scripts]
