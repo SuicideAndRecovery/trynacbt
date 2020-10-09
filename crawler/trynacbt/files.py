@@ -20,4 +20,7 @@ def ensure_data_file_path():
     os.makedirs(data_file_path(''), exist_ok=True)
 
 
+GOODBYE_CLASSIFIER_PATH = data_file_path('goodbye_classifier')
+
+
 SQLITE_MAIN_PATH = data_file_path('trynacbt_main.sqlite')

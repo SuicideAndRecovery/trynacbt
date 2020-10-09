@@ -10,6 +10,7 @@ License:
 import click
 import scrapy
 
+import trynacbt.classifier as classifier
 import trynacbt.crawler as crawler
 import trynacbt.trainingdata as trainingdata
 
@@ -53,6 +54,25 @@ def trainset():
         inputResponse = input('(1) yes or (2) no or nothing: ')
         if inputResponse in ('1', '2'):
             trainingdata.save(thread, inputResponse == '1')
+
+
+@main.command()
+def learn():
+    '''Learn (train the classifier) from the current set of training data.'''
+    classifier.train()
+
+
+@main.command()
+def list():
+    '''List recently found goodbye threads.'''
+    goodbye_threads = classifier.recent_goodbye_threads()
+
+    print('___Recent goodbye threads___:')
+
+    for thread in goodbye_threads:
+        print('---%s---' % thread.title)
+        print('Message: %s' % thread.message)
+        print('---')
 
 
 if __name__ == '__main__':
