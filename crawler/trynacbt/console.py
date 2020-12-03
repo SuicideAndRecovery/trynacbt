@@ -30,6 +30,16 @@ def sitemap(url):
     '''
     crawler.crawl_sitemap(url)
 
+
+@main.command()
+@click.argument('url')
+def page(url):
+    '''
+    Crawls a page looking for SanctionedSuicide threads.
+    '''
+    crawler.crawl_page(url)
+
+
 @main.command()
 def trainset():
     '''
