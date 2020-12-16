@@ -25,6 +25,7 @@ setup(
         'appdirs',
         'click',
         'python-dateutil',
+        'requests',
         'scrapy==2.3',
         'tensorflow',
         'tensorflow_hub'

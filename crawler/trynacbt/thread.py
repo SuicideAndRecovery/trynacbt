@@ -6,10 +6,11 @@ import trynacbt.files as files
 
 class Thread:
     '''Represents a thread on the forum.'''
-    def __init__(self, uri, title, message):
+    def __init__(self, uri, title, message, datetimePosted):
         self.uri = uri
         self.title = title
         self.message = message
+        self.datetimePosted = datetimePosted
 
 
 def initialize_data():

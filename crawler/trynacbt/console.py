@@ -12,6 +12,7 @@ import scrapy
 
 import trynacbt.classifier as classifier
 import trynacbt.crawler as crawler
+import trynacbt.plugin as plugin
 import trynacbt.trainingdata as trainingdata
 
 
@@ -83,6 +84,17 @@ def list():
         print('---%s---' % thread.title)
         print('Message: %s' % thread.message)
         print('---')
+
+@main.command()
+@click.argument('url')
+@click.argument('apikey')
+def sync(url, apikey):
+    '''Synchronize recent goodbye threads with a server running the plugin.'''
+    goodbye_threads = classifier.recent_goodbye_threads()
+
+    print('Attempting to sync with server.')
+
+    plugin.sync_threads(url, apikey, goodbye_threads)
 
 
 if __name__ == '__main__':

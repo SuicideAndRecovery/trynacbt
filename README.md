@@ -11,3 +11,5 @@ trynacbt trainingset
 trynacbt learn
 
 trynacbt list
+
+trynacbt sync http://localhost/blog/wp-json/trynacbt/v1/sync/ APIKEYHERE
