@@ -32,7 +32,7 @@ def get_next_thread():
     cursor = connection.cursor()
 
     cursor.execute('''
-        SELECT T.uri, T.title, P.message
+        SELECT T.uri, T.title, P.message, P.datetimePosted
             FROM Threads T
             JOIN Posts P
                 ON T.id = P.threadId
@@ -51,7 +51,7 @@ def get_next_thread():
     if not row:
         return None
 
-    return thread.Thread(row[0], row[1], row[2])
+    return thread.Thread(row[0], row[1], row[2], row[3])
 
 
 def save(thread, isGoodbyeThread):

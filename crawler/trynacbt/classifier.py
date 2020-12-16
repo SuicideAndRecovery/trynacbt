@@ -78,7 +78,7 @@ def _recent_threads():
     threads = []
     row = cursor.fetchone()
     while row:
-        threads.append(thread.Thread(row[0], row[1], row[2]))
+        threads.append(thread.Thread(row[0], row[1], row[2], row[3]))
         row = cursor.fetchone()
 
     connection.close()
