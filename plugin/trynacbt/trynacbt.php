@@ -12,7 +12,7 @@ function trynacbt_on_activation() {
       title VARCHAR(151)
       , datetimePosted VARCHAR(25)
       , uri VARCHAR(500)
-      , UNiQUE KEY {$wpdb->prefix}idx_trynacbt_threads (uri)
+      , UNiQUE KEY {$wpdb->prefix}idx_trynacbt_threads (uri(50))
     )"
   );
 }
