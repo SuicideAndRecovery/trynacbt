@@ -24,7 +24,7 @@ def crawl_sitemap(url):
 class _SitemapSpider(scrapy.spiders.SitemapSpider):
     '''A spider to crawl the sitemap.'''
     name = 'trynacbt'
-    allowed_domains = ['sanctionedsuicide.com']
+    allowed_domains = ['sanctioned-suicide.org']
     download_delay = 4
 
     def sitemap_filter(self, entries):
@@ -40,8 +40,8 @@ class _SitemapSpider(scrapy.spiders.SitemapSpider):
 
             uri = entry['loc']
 
-            if (not uri.startswith('https://sanctionedsuicide.com/threads/')) and (
-                    not uri.startswith('https://sanctionedsuicide.com/sitemap.xml')):
+            if (not uri.startswith('https://sanctioned-suicide.org/threads/')) and (
+                    not uri.startswith('https://sanctioned-suicide.org/sitemap.xml')):
                 continue
 
             datetimeModified = parser.parse(entry['lastmod']) \
@@ -139,11 +139,11 @@ def crawl_page(url):
 class _PageSpider(scrapy.spiders.Spider):
     '''A spider to crawl a page.'''
     name = 'trynacbt'
-    allowed_domains = ['sanctionedsuicide.com']
+    allowed_domains = ['sanctioned-suicide.org']
     download_delay = 4
 
     def parse(self, response):
-        if response.url.startswith('https://sanctionedsuicide.com/threads/'):
+        if response.url.startswith('https://sanctioned-suicide.org/threads/'):
             _parse_thread(self, response)
             yield
         else:

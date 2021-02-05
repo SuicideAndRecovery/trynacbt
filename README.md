@@ -1,10 +1,10 @@
-A crawler for the SanctionedSuicide forum.
+A crawler for the Sanctioned Suicide forum.
 
 sudo pip3 install -e .
 
-trynacbt sitemap https://sanctionedsuicide.com/sitemap-2.xml
+trynacbt sitemap https://sanctioned-suicide.org/sitemap-2.xml
 
-trynacbt page https://sanctionedsuicide.com/forums/suicide-discussion.2/
+trynacbt page https://sanctioned-suicide.org/forums/suicide-discussion.2/
 
 trynacbt trainingset
 
