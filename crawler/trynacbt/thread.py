@@ -13,6 +13,16 @@ class Thread:
         self.datetimePosted = datetimePosted
 
 
+class Post:
+    '''Represents a single post in a thread on the forum.'''
+    def __init__(self, postIndex, username, message, reactionCount, datetimePosted):
+        self.postIndex = postIndex
+        self.username = username
+        self.message = message
+        self.reactionCount = reactionCount
+        self.datetimePosted = datetimePosted
+
+
 def initialize_data():
     '''Create the tables for storing crawled threads if needed.'''
     _ensure_tables_exist()
@@ -61,7 +71,7 @@ def _ensure_tables_exist():
     connection.close()
 
 
-def save(uri, username, title, message, reactionCount, datetimePosted):
+def save(uri, title, posts):
     '''Save a crawled thread to the database.'''
     connection = sqlite3.connect(files.SQLITE_MAIN_PATH)
     cursor = connection.cursor()
@@ -74,18 +84,31 @@ def save(uri, username, title, message, reactionCount, datetimePosted):
             DO UPDATE SET title = excluded.title;
     ''', (uri, title))
 
+    connection.commit()
+
+    # Get the ID of the thread.
     cursor.execute('''
-        INSERT INTO Posts
-            (threadId, postIndex, message, reactionCount, datetimePosted,
-                username)
-            VALUES (?, 0, ?, ?, ?, ?)
-            ON CONFLICT (threadId, postIndex)
-            DO UPDATE SET message = excluded.message,
-                reactionCount = excluded.reactionCount,
-                datetimePosted = excluded.datetimePosted,
-                username = excluded.username;
-    ''', (cursor.lastrowid, message, reactionCount, \
-            datetimePosted.isoformat(), username))
+        SELECT id
+            FROM Threads
+            WHERE uri = ?;
+    ''', (uri,))
+    row = cursor.fetchone()
+    if row:
+        threadId = row[0]
+
+    for post in posts:
+        cursor.execute('''
+            INSERT INTO Posts
+                (threadId, postIndex, message, reactionCount, datetimePosted,
+                    username)
+                VALUES (?, ?, ?, ?, ?, ?)
+                ON CONFLICT (threadId, postIndex)
+                DO UPDATE SET message = excluded.message,
+                    reactionCount = excluded.reactionCount,
+                    datetimePosted = excluded.datetimePosted,
+                    username = excluded.username;
+        ''', (threadId, post.postIndex, post.message, post.reactionCount, \
+                post.datetimePosted.isoformat(), post.username))
 
     connection.commit()
     connection.close()

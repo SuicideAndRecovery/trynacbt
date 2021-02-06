@@ -60,10 +60,6 @@ class _SitemapSpider(scrapy.spiders.SitemapSpider):
 def _parse_thread(self, response):
     '''Parse a thread, saving it to the database if nothing is missing.'''
     title = ''
-    username = ''
-    message = ''
-    reactionCount = 0
-    datetimePosted = None
 
     for titleResponse in response.css('h1.p-title-value'):
         title = titleResponse.get()
@@ -75,50 +71,90 @@ def _parse_thread(self, response):
         pattern = re.compile(r'<h1[^>]*?>(<span[^>]*>[^<]*</[^>]*>[^<]*<span[^>]*>[^<]*</[^>]*>)?([\s\S]*?)</h1>')
         match = pattern.match(title)
         if match:
-            title = match.group(2)
+            title = match.group(2).strip()
         break
 
-    for usernameResponse in response.css('.message-name span span ::text'):
-        username = usernameResponse.get()
-        break
-
-    if not username:
-        for usernameResponse in response.css('.message-name span ::text'):
-            username = usernameResponse.get()
-            break
-
-    for messageResponse in response.css('article.message-body .bbWrapper'):
-        message = messageResponse.get()
-        break
-
-    for reactionResponse in response.css('.reactionsBar .reactionsBar-link'):
-        reactionText = reactionResponse.get()
-        pattern = re.compile(r'.*?and (\d+) others')
-        match = pattern.match(reactionText)
-        if match:
-            reactionCount = 3 + int(match.group(1))
-        break
-
-    for messageResponse in response.css('time.u-dt ::attr(datetime)'):
-        datetimePosted = parser.parse(messageResponse.get())
-        break
-
-    print(title)
-    print(username)
-    print(message)
-    print(reactionCount)
-    print(datetimePosted)
-
-    if title == '' or username == '' or message == '' or datetimePosted is None:
+    if title == '':
+        print('Error: Missing title in ' + response.url)
         return
 
+    print('-------' + title + '-------')
+
+    isFirstPost = True
+    posts = []
+
+    for postResponse in response.css('article.message'):
+        postIndex = None
+        username = ''
+        message = ''
+        reactionCount = 0
+        datetimePosted = None
+
+        if isFirstPost:
+            postIndex = 0
+        else:
+            for postIndexResponse in postResponse.css('article ::attr(id)'):
+                postIndexWithExtraText = postIndexResponse.get()
+                pattern = re.compile(r'js-post-(\d+)')
+                match = pattern.match(postIndexWithExtraText)
+                if match:
+                    postIndex = match.group(1)
+                break
+
+
+
+        for usernameResponse in postResponse.css('.message-name span span ::text'):
+            username = usernameResponse.get().strip()
+            break
+
+        if not username:
+            for usernameResponse in postResponse.css('.message-name span ::text'):
+                username = usernameResponse.get().strip()
+                break
+
+        for messageResponse in postResponse.css('article.message-body .bbWrapper'):
+            message = messageResponse.get().strip()
+            break
+
+        for reactionResponse in postResponse.css('.reactionsBar .reactionsBar-link'):
+            reactionText = reactionResponse.get()
+            pattern = re.compile(r'.*?and (\d+) others')
+            match = pattern.match(reactionText)
+            if match:
+                reactionCount = 3 + int(match.group(1))
+            break
+
+        for messageResponse in postResponse.css('time.u-dt ::attr(datetime)'):
+            datetimePosted = parser.parse(messageResponse.get().strip())
+            break
+
+        print('--')
+        print('postIndex: ' + str(postIndex))
+        print('username: ' + username)
+        print('message: ' + message)
+        print('reactionCount: ' + str(reactionCount))
+        print('date: ' + str(datetimePosted))
+
+        isFirstPost = False
+
+        if username == '' or message == '' \
+                or datetimePosted is None or postIndex is None:
+            print('Error: Missing username, message, date or index in ' + response.url)
+            continue
+
+        post = thread.Post(
+            postIndex = postIndex,
+            username = username,
+            message = message,
+            reactionCount = reactionCount,
+            datetimePosted = datetimePosted
+        )
+        posts.append(post)
+
     thread.save(
-        uri=response.url,
-        username=username,
-        title=title,
-        message=message,
-        reactionCount=reactionCount,
-        datetimePosted=datetimePosted
+        uri = response.url,
+        title = title,
+        posts = posts
     )
     crawleduri.save_crawled_now(response.url)
 
